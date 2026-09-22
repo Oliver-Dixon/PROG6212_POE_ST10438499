@@ -1,0 +1,108 @@
+// RaceDay ERD source (DBML) - generated from RaceDay_Database.sql
+// Paste into https://dbdiagram.io to edit, then Export > PNG/PDF to replace RaceDay_ERD.png.
+// If you change a table here, make the SAME change in RaceDay_Database.sql (the ERD must match the script).
+
+Table Roles {
+  RoleId int [pk, increment]
+  RoleName nvarchar(20) [not null, unique]
+  Description nvarchar(200)
+}
+
+Table Users {
+  UserId int [pk, increment]
+  RoleId int [not null]
+  FirstName nvarchar(50) [not null]
+  LastName nvarchar(50) [not null]
+  Email nvarchar(255) [not null, unique]
+  PasswordHash nvarchar(255) [not null]
+  PhoneNumber nvarchar(20)
+  DateOfBirth date
+  City nvarchar(100)
+  EmergencyContactName nvarchar(100)
+  EmergencyContactPhone nvarchar(20)
+  IsActive bit [not null, default: 1]
+  CreatedAt datetime2(0) [not null, default: `SYSUTCDATETIME()`]
+}
+
+Table EventTypes {
+  EventTypeId int [pk, increment]
+  TypeName nvarchar(50) [not null, unique]
+  Description nvarchar(200)
+}
+
+Table Venues {
+  VenueId int [pk, increment]
+  VenueName nvarchar(150) [not null]
+  AddressLine nvarchar(200)
+  City nvarchar(100) [not null]
+  Province nvarchar(50) [not null]
+  Latitude decimal(9,6) [not null]
+  Longitude decimal(9,6) [not null]
+  indexes {
+    (VenueName, City) [unique]
+  }
+}
+
+Table Events {
+  EventId int [pk, increment]
+  OrganiserId int [not null]
+  EventTypeId int [not null]
+  VenueId int [not null]
+  EventName nvarchar(150) [not null]
+  Description nvarchar(2000)
+  EventDate date [not null]
+  RegistrationDeadline date [not null]
+  Status nvarchar(20) [not null, default: 'Draft']
+  ImageUrl nvarchar(500)
+  RouteMapUrl nvarchar(500)
+  CreatedAt datetime2(0) [not null, default: `SYSUTCDATETIME()`]
+  UpdatedAt datetime2(0)
+  indexes {
+    (EventName, EventDate) [unique]
+  }
+}
+
+Table Categories {
+  CategoryId int [pk, increment]
+  EventId int [not null]
+  CategoryName nvarchar(100) [not null]
+  DistanceKm decimal(6,2) [not null]
+  StartTime time(0) [not null]
+  EntryFee decimal(10,2) [not null, default: 0]
+  MaxParticipants int [not null]
+  MinimumAge tinyint [not null, default: 0]
+  indexes {
+    (EventId, CategoryName) [unique]
+  }
+}
+
+Table Enrolments {
+  EnrolmentId int [pk, increment]
+  ParticipantId int [not null]
+  CategoryId int [not null]
+  RaceNumber nvarchar(10)
+  Status nvarchar(20) [not null, default: 'Confirmed']
+  EnrolledAt datetime2(0) [not null, default: `SYSUTCDATETIME()`]
+  indexes {
+    (ParticipantId, CategoryId) [unique]
+  }
+}
+
+Table Results {
+  ResultId int [pk, increment]
+  EnrolmentId int [not null, unique]
+  FinishStatus nvarchar(10) [not null, default: 'Finished']
+  FinishTime time(0)
+  CategoryPosition int
+  RecordedAt datetime2(0) [not null, default: `SYSUTCDATETIME()`]
+}
+
+// Relationships  (> many-to-one, - one-to-one)
+Ref: Users.RoleId > Roles.RoleId
+Ref: Events.OrganiserId > Users.UserId
+Ref: Events.EventTypeId > EventTypes.EventTypeId
+Ref: Events.VenueId > Venues.VenueId
+Ref: Categories.EventId > Events.EventId
+Ref: Enrolments.ParticipantId > Users.UserId
+Ref: Enrolments.CategoryId > Categories.CategoryId
+Ref: Results.EnrolmentId - Enrolments.EnrolmentId
