@@ -47,3 +47,22 @@ CREATE TABLE Venues (
     UNIQUE (VenueName, City)
 );
 GO
+
+CREATE TABLE Events (
+    EventId INT IDENTITY(1,1) PRIMARY KEY,
+    OrganiserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    EventTypeId INT NOT NULL FOREIGN KEY REFERENCES EventTypes(EventTypeId),
+    VenueId INT NOT NULL FOREIGN KEY REFERENCES Venues(VenueId),
+    EventName NVARCHAR(150) NOT NULL,
+    Description NVARCHAR(2000),
+    EventDate DATE NOT NULL,
+    RegistrationDeadline DATE NOT NULL,
+    Status NVARCHAR(20) NOT NULL DEFAULT 'Draft' CHECK (Status IN ('Draft', 'Open', 'Closed', 'Completed', 'Cancelled')),
+    ImageUrl NVARCHAR(500),
+    RouteMapUrl NVARCHAR(500),
+    CreatedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(),
+    UpdatedAt DATETIME2(0),
+    UNIQUE (EventName, EventDate),
+    CHECK (RegistrationDeadline <= EventDate)
+);
+GO
