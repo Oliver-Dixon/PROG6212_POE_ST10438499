@@ -102,3 +102,34 @@ CREATE TABLE Results (
         OR (FinishStatus <> 'Finished' AND FinishTime IS NULL AND CategoryPosition IS NULL))
 );
 GO
+
+INSERT INTO Roles (RoleName, Description) VALUES
+('Organiser', 'Creates and manages events, categories and participant results.'),
+('Participant', 'Browses events, enrols in categories and tracks personal performance history.');
+GO
+
+DECLARE @pw NVARCHAR(255) = '$2b$11$i3K7yDdq51UrYtvGXABe5OVQFqgIGa1jfwJcsQOwtm8UFmzLhgdJO';
+INSERT INTO Users (RoleId, FirstName, LastName, Email, PasswordHash, PhoneNumber, DateOfBirth, City, EmergencyContactName, EmergencyContactPhone) VALUES
+(1, 'Thandiwe', 'Nkosi', 'thandiwe.nkosi@example.com', @pw, '+27825550101', NULL, 'Durban', NULL, NULL),
+(1, 'Pieter', 'van der Merwe', 'pieter.vandermerwe@example.com', @pw, '+27835550102', NULL, 'Stellenbosch', NULL, NULL),
+(2, 'Sipho', 'Dlamini', 'sipho.dlamini@example.com', @pw, '+27715550103', '1990-04-12', 'Johannesburg', 'Nomsa Dlamini', '+27715550203'),
+(2, 'Ayesha', 'Patel', 'ayesha.patel@example.com', @pw, '+27845550104', '1995-09-03', 'Durban', 'Imran Patel', '+27845550204'),
+(2, 'Lerato', 'Mokoena', 'lerato.mokoena@example.com', @pw, '+27725550105', '1988-01-27', 'Pretoria', 'Kabelo Mokoena', '+27725550205'),
+(2, 'Johan', 'Botha', 'johan.botha@example.com', @pw, '+27825550106', '1979-11-15', 'Cape Town', 'Marietjie Botha', '+27825550206'),
+(2, 'Naledi', 'Khumalo', 'naledi.khumalo@example.com', @pw, '+27765550107', '2001-06-30', 'Soweto', 'Zanele Khumalo', '+27765550207'),
+(2, 'Ryan', 'Naidoo', 'ryan.naidoo@example.com', @pw, '+27615550108', '1993-02-08', 'Durban', 'Priya Naidoo', '+27615550208');
+GO
+
+INSERT INTO EventTypes (TypeName, Description) VALUES
+('Road Running', 'Tarred road races from 5 km fun runs to ultra-marathons.'),
+('Trail Running', 'Off-road running on mountain, forest and nature reserve trails.'),
+('Walking', 'Community, heritage and charity walks for all ages.'),
+('Cycling', 'Road cycling races and fun rides.');
+GO
+
+INSERT INTO Venues (VenueName, AddressLine, City, Province, Latitude, Longitude) VALUES
+('Durban Beachfront Promenade', 'O R Tambo Parade', 'Durban', 'KwaZulu-Natal', -29.858700, 31.043000),
+('Silvermine Nature Reserve', 'Ou Kaapse Weg', 'Cape Town', 'Western Cape', -34.083300, 18.420000),
+('Stellenbosch Town Centre', 'Die Braak, Bird St', 'Stellenbosch', 'Western Cape', -33.936800, 18.860200),
+('Vilakazi Street Precinct', 'Vilakazi St, Orlando', 'Soweto', 'Gauteng', -26.238600, 27.908100);
+GO
