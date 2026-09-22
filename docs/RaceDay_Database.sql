@@ -182,3 +182,21 @@ INSERT INTO Results (EnrolmentId, FinishStatus, FinishTime, CategoryPosition, Re
 (5, 'Finished', '00:51:30', 2, '2026-08-16 13:00'),
 (6, 'Finished', '00:38:20', 1, '2026-08-16 13:00');
 GO
+
+SELECT 'Roles' AS TableName, COUNT(*) AS TotalRows FROM Roles
+UNION ALL SELECT 'Users', COUNT(*) FROM Users
+UNION ALL SELECT 'EventTypes', COUNT(*) FROM EventTypes
+UNION ALL SELECT 'Venues', COUNT(*) FROM Venues
+UNION ALL SELECT 'Events', COUNT(*) FROM Events
+UNION ALL SELECT 'Categories', COUNT(*) FROM Categories
+UNION ALL SELECT 'Enrolments', COUNT(*) FROM Enrolments
+UNION ALL SELECT 'Results', COUNT(*) FROM Results;
+
+SELECT u.FirstName + ' ' + u.LastName AS Participant, e.EventName, c.CategoryName,
+       r.FinishStatus, r.FinishTime, r.CategoryPosition
+FROM Results r
+JOIN Enrolments en ON en.EnrolmentId = r.EnrolmentId
+JOIN Users u ON u.UserId = en.ParticipantId
+JOIN Categories c ON c.CategoryId = en.CategoryId
+JOIN Events e ON e.EventId = c.EventId
+ORDER BY c.CategoryId, ISNULL(r.CategoryPosition, 999);
