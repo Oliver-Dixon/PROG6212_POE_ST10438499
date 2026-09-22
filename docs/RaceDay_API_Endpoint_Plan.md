@@ -25,3 +25,21 @@
 | DELETE | /api/events/{id} | Deletes the organiser's own event if nobody has entered it. | Organiser | None | 204 No Content - event deleted; 403 Forbidden - not your event; 404 Not Found - event does not exist; 409 Conflict - event already has enrolments |
 | GET | /api/event-types | Lists the event types (Road Running, Trail Running, Walking, Cycling) for the create-event form. | None | None | 200 OK - list of event types |
 | GET | /api/venues | Lists the venues for the create-event form. | None | None | 200 OK - list of venues |
+
+## 4. Categories
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| GET | /api/events/{eventId}/categories | Lists the categories (distances) offered in an event. | None | None | 200 OK - list of categories; 404 Not Found - event does not exist |
+| POST | /api/events/{eventId}/categories | Adds a category to the organiser's own event. | Organiser | { categoryName, distanceKm, startTime, entryFee, maxParticipants, minimumAge } | 201 Created - new category; 400 Bad Request - invalid values; 403 Forbidden - not your event; 404 Not Found - event does not exist; 409 Conflict - category name already used in this event |
+| PUT | /api/categories/{id} | Updates a category in the organiser's own event. | Organiser | { categoryName, distanceKm, startTime, entryFee, maxParticipants, minimumAge } | 200 OK - updated category; 400 Bad Request - invalid values; 403 Forbidden - not your event; 404 Not Found - category does not exist |
+| DELETE | /api/categories/{id} | Deletes a category that has no enrolments. | Organiser | None | 204 No Content - category deleted; 403 Forbidden - not your event; 404 Not Found - category does not exist; 409 Conflict - category has enrolments |
+
+## 5. Event Enrolments
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| POST | /api/enrolments | Enters the logged-in participant into a category of an open event. | Participant | { categoryId } | 201 Created - enrolment with race number; 400 Bad Request - event not open or registration closed; 403 Forbidden - not a Participant; 404 Not Found - category does not exist; 409 Conflict - already entered or category full |
+| GET | /api/users/me/enrolments | Lists the logged-in participant's enrolments. | Participant | None | 200 OK - list of enrolments; 403 Forbidden - not a Participant |
+| DELETE | /api/enrolments/{id} | Cancels the participant's own enrolment (status set to Cancelled so history is kept). | Participant | None | 204 No Content - enrolment cancelled; 403 Forbidden - not your enrolment; 404 Not Found - enrolment does not exist |
+| GET | /api/events/{eventId}/enrolments | Lists everyone entered in the organiser's own event. | Organiser | None | 200 OK - list of participants; 403 Forbidden - not your event; 404 Not Found - event does not exist |
