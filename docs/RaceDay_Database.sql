@@ -133,3 +133,28 @@ INSERT INTO Venues (VenueName, AddressLine, City, Province, Latitude, Longitude)
 ('Stellenbosch Town Centre', 'Die Braak, Bird St', 'Stellenbosch', 'Western Cape', -33.936800, 18.860200),
 ('Vilakazi Street Precinct', 'Vilakazi St, Orlando', 'Soweto', 'Gauteng', -26.238600, 27.908100);
 GO
+
+INSERT INTO Events (OrganiserId, EventTypeId, VenueId, EventName, Description, EventDate, RegistrationDeadline, Status) VALUES
+(1, 1, 1, 'Durban Sunrise Half Marathon', 'A flat, fast coastal route along the Golden Mile, starting at sunrise.', '2026-08-16', '2026-08-09', 'Completed'),
+(2, 2, 2, 'Silvermine Trail Challenge', 'Single-track mountain trails with views over False Bay and the Atlantic.', '2026-10-25', '2026-10-18', 'Open'),
+(2, 4, 3, 'Winelands Cycle Classic', 'A scenic road ride through the Stellenbosch and Franschhoek wine valleys.', '2026-11-15', '2026-11-01', 'Open');
+GO
+
+INSERT INTO Events (OrganiserId, EventTypeId, VenueId, EventName, Description, EventDate, RegistrationDeadline) VALUES
+(1, 3, 4, 'Soweto Reconciliation Walk', 'A community heritage walk past Vilakazi Street landmarks on Reconciliation Day.', '2026-12-16', '2026-12-09');
+GO
+
+INSERT INTO Categories (EventId, CategoryName, DistanceKm, StartTime, EntryFee, MaxParticipants, MinimumAge) VALUES
+(1, '21.1 km Half Marathon', 21.10, '05:30', 250.00, 1500, 16),
+(1, '10 km Road Race', 10.00, '06:00', 150.00, 2000, 12),
+(1, '5 km Fun Walk', 5.00, '06:30', 60.00, 1000, 0),
+(2, '22 km Trail Run', 22.00, '06:30', 380.00, 300, 18),
+(2, '12 km Trail Run', 12.00, '07:00', 280.00, 400, 14),
+(3, '105 km Road Race', 105.00, '06:00', 650.00, 1200, 16),
+(3, '50 km Fun Ride', 50.00, '07:30', 350.00, 800, 12),
+(4, '8 km Heritage Walk', 8.00, '08:00', 80.00, 1500, 0);
+GO
+
+INSERT INTO Categories (EventId, CategoryName, DistanceKm, StartTime, MaxParticipants) VALUES
+(4, '3 km Family Walk', 3.00, '08:30', 500);
+GO
