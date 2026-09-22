@@ -79,3 +79,14 @@ CREATE TABLE Categories (
     UNIQUE (EventId, CategoryName)
 );
 GO
+
+CREATE TABLE Enrolments (
+    EnrolmentId INT IDENTITY(1,1) PRIMARY KEY,
+    ParticipantId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    CategoryId INT NOT NULL FOREIGN KEY REFERENCES Categories(CategoryId),
+    RaceNumber NVARCHAR(10),
+    Status NVARCHAR(20) NOT NULL DEFAULT 'Confirmed' CHECK (Status IN ('Pending', 'Confirmed', 'Cancelled')),
+    EnrolledAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(),
+    UNIQUE (ParticipantId, CategoryId)
+);
+GO
