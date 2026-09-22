@@ -28,3 +28,22 @@ CREATE TABLE Users (
     CreatedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME()
 );
 GO
+
+CREATE TABLE EventTypes (
+    EventTypeId INT IDENTITY(1,1) PRIMARY KEY,
+    TypeName NVARCHAR(50) NOT NULL UNIQUE,
+    Description NVARCHAR(200)
+);
+GO
+
+CREATE TABLE Venues (
+    VenueId INT IDENTITY(1,1) PRIMARY KEY,
+    VenueName NVARCHAR(150) NOT NULL,
+    AddressLine NVARCHAR(200),
+    City NVARCHAR(100) NOT NULL,
+    Province NVARCHAR(50) NOT NULL,
+    Latitude DECIMAL(9,6) NOT NULL,
+    Longitude DECIMAL(9,6) NOT NULL,
+    UNIQUE (VenueName, City)
+);
+GO
