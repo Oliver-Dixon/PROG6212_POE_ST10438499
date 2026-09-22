@@ -43,3 +43,13 @@
 | GET | /api/users/me/enrolments | Lists the logged-in participant's enrolments. | Participant | None | 200 OK - list of enrolments; 403 Forbidden - not a Participant |
 | DELETE | /api/enrolments/{id} | Cancels the participant's own enrolment (status set to Cancelled so history is kept). | Participant | None | 204 No Content - enrolment cancelled; 403 Forbidden - not your enrolment; 404 Not Found - enrolment does not exist |
 | GET | /api/events/{eventId}/enrolments | Lists everyone entered in the organiser's own event. | Organiser | None | 200 OK - list of participants; 403 Forbidden - not your event; 404 Not Found - event does not exist |
+
+## 6. Results
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| POST | /api/results | Records a participant's result for the organiser's own event. | Organiser | { enrolmentId, finishStatus, finishTime, categoryPosition } | 201 Created - new result; 400 Bad Request - finish time missing for a finisher or given for a DNF; 403 Forbidden - not your event; 404 Not Found - enrolment does not exist; 409 Conflict - result already recorded |
+| PUT | /api/results/{id} | Corrects a recorded result. | Organiser | { finishStatus, finishTime, categoryPosition } | 200 OK - updated result; 400 Bad Request - invalid values; 403 Forbidden - not your event; 404 Not Found - result does not exist |
+| GET | /api/events/{eventId}/results | Lists an event's results in finishing order. | None | None | 200 OK - list of results; 404 Not Found - event does not exist |
+| GET | /api/users/me/results | Returns the logged-in participant's performance history. | Participant | None | 200 OK - list of past results; 403 Forbidden - not a Participant |
+
