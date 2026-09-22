@@ -90,3 +90,15 @@ CREATE TABLE Enrolments (
     UNIQUE (ParticipantId, CategoryId)
 );
 GO
+
+CREATE TABLE Results (
+    ResultId INT IDENTITY(1,1) PRIMARY KEY,
+    EnrolmentId INT NOT NULL UNIQUE FOREIGN KEY REFERENCES Enrolments(EnrolmentId) ON DELETE CASCADE,
+    FinishStatus NVARCHAR(10) NOT NULL DEFAULT 'Finished' CHECK (FinishStatus IN ('Finished', 'DNF', 'DNS', 'DSQ')),
+    FinishTime TIME(0),
+    CategoryPosition INT CHECK (CategoryPosition > 0),
+    RecordedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(),
+    CHECK ((FinishStatus = 'Finished' AND FinishTime IS NOT NULL AND CategoryPosition IS NOT NULL)
+        OR (FinishStatus <> 'Finished' AND FinishTime IS NULL AND CategoryPosition IS NULL))
+);
+GO
