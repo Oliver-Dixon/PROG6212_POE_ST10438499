@@ -158,3 +158,27 @@ GO
 INSERT INTO Categories (EventId, CategoryName, DistanceKm, StartTime, MaxParticipants) VALUES
 (4, '3 km Family Walk', 3.00, '08:30', 500);
 GO
+
+INSERT INTO Enrolments (ParticipantId, CategoryId, RaceNumber, Status, EnrolledAt) VALUES
+(3, 1, 'DSH1001', 'Confirmed', '2026-06-02 09:15'),
+(4, 1, 'DSH1002', 'Confirmed', '2026-06-10 18:42'),
+(8, 1, 'DSH1003', 'Confirmed', '2026-07-01 07:05'),
+(5, 2, 'DSH2001', 'Confirmed', '2026-06-15 12:30'),
+(7, 2, 'DSH2002', 'Confirmed', '2026-07-20 20:11'),
+(6, 3, 'DSH3001', 'Confirmed', '2026-08-01 10:00'),
+(6, 4, 'SMT0101', 'Confirmed', '2026-08-20 08:25'),
+(3, 5, 'SMT0201', 'Confirmed', '2026-09-01 19:40'),
+(4, 5, 'SMT0202', 'Cancelled', '2026-09-05 13:05'),
+(5, 6, 'WCC0001', 'Confirmed', '2026-09-10 06:50'),
+(8, 7, 'WCC5001', 'Confirmed', '2026-09-12 21:15'),
+(7, 7, NULL, 'Pending', '2026-09-15 16:30');
+GO
+
+INSERT INTO Results (EnrolmentId, FinishStatus, FinishTime, CategoryPosition, RecordedAt) VALUES
+(1, 'Finished', '01:38:42', 1, '2026-08-16 13:00'),
+(2, 'Finished', '01:52:10', 2, '2026-08-16 13:00'),
+(3, 'DNF', NULL, NULL, '2026-08-16 13:00'),
+(4, 'Finished', '00:44:05', 1, '2026-08-16 13:00'),
+(5, 'Finished', '00:51:30', 2, '2026-08-16 13:00'),
+(6, 'Finished', '00:38:20', 1, '2026-08-16 13:00');
+GO
