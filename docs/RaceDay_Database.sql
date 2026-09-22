@@ -66,3 +66,16 @@ CREATE TABLE Events (
     CHECK (RegistrationDeadline <= EventDate)
 );
 GO
+
+CREATE TABLE Categories (
+    CategoryId INT IDENTITY(1,1) PRIMARY KEY,
+    EventId INT NOT NULL FOREIGN KEY REFERENCES Events(EventId) ON DELETE CASCADE,
+    CategoryName NVARCHAR(100) NOT NULL,
+    DistanceKm DECIMAL(6,2) NOT NULL CHECK (DistanceKm > 0),
+    StartTime TIME(0) NOT NULL,
+    EntryFee DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (EntryFee >= 0),
+    MaxParticipants INT NOT NULL CHECK (MaxParticipants > 0),
+    MinimumAge TINYINT NOT NULL DEFAULT 0,
+    UNIQUE (EventId, CategoryName)
+);
+GO
