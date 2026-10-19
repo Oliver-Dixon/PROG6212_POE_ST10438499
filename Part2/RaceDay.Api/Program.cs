@@ -1,12 +1,24 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using RaceDay.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Database: SQL Server, using the "RaceDayDB" connection string in appsettings.json
-builder.Services.AddDbContext<RaceDayContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDayDB")));
+// Database: SQL Server when the API runs, a fresh in-memory database when the unit tests run
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    // Each test starts the API again, so EF Core's "many service providers" warning is expected here
+    var testDatabaseName = "RaceDayTests-" + Guid.NewGuid();
+    builder.Services.AddDbContext<RaceDayContext>(options => options
+        .UseInMemoryDatabase(testDatabaseName)
+        .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning)));
+}
+else
+{
+    builder.Services.AddDbContext<RaceDayContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDayDB")));
+}
 
 // Server-side session: after login it stores the user's ID and role for every later request
 builder.Services.AddDistributedMemoryCache();
@@ -35,7 +47,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<RaceDayContext>();
-    db.Database.Migrate();
+    if (db.Database.IsRelational())
+        db.Database.Migrate();
+    else
+        db.Database.EnsureCreated();
 }
 
 app.UseSwagger();
@@ -46,3 +61,8 @@ app.UseSession();
 app.MapControllers();
 
 app.Run();
+
+// Lets the unit test project start the API
+public partial class Program
+{
+}
