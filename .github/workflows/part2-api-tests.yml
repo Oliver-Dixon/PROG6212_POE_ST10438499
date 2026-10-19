@@ -1,0 +1,40 @@
+name: Part 2 - Build and test API
+
+# Runs on every push and pull request, and can be started manually
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build API and run unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Check Part 2 folder structure
+        run: |
+          for path in Part2/RaceDay.Api/RaceDay.Api.csproj Part2/RaceDay.Api/Migrations Part2/RaceDay.Api.Tests/RaceDay.Api.Tests.csproj; do
+            if [ ! -e "$path" ]; then
+              echo "::error::$path is missing."
+              exit 1
+            fi
+            echo "OK: $path"
+          done
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore packages
+        run: dotnet restore Part2/RaceDay.Api.Tests/RaceDay.Api.Tests.csproj
+
+      - name: Build the API and test project
+        run: dotnet build Part2/RaceDay.Api.Tests/RaceDay.Api.Tests.csproj --no-restore --configuration Release
+
+      - name: Run all unit tests
+        run: dotnet test Part2/RaceDay.Api.Tests/RaceDay.Api.Tests.csproj --no-build --configuration Release --logger "console;verbosity=normal"
