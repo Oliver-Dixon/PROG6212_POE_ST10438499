@@ -1,0 +1,10 @@
+# Visual Studio and SSMS settings
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Build output
+bin/
+obj/
+TestResults/
