@@ -101,5 +101,8 @@ public class RaceDayContext : DbContext
                 "([FinishStatus] = 'Finished' AND [FinishTime] IS NOT NULL AND [CategoryPosition] IS NOT NULL) OR " +
                 "([FinishStatus] <> 'Finished' AND [FinishTime] IS NULL AND [CategoryPosition] IS NULL)");
         });
+
+        // Sample data from the Part 1 SQL script
+        SeedData.Apply(modelBuilder);
     }
 }
