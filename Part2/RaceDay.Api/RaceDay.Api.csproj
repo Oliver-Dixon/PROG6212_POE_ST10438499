@@ -4,6 +4,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Creates RaceDay.Api.xml from the /// comments so Swagger can show endpoint descriptions -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +17,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.*" />
   </ItemGroup>
 
 </Project>

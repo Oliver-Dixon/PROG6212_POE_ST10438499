@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using RaceDay.Api.Data;
 
@@ -19,9 +20,14 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddControllers();
 
-// Swagger: lists every endpoint so it can be tested in the browser
+// Swagger: lists every endpoint with the descriptions from the /// comments in the controllers
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+    if (File.Exists(xmlPath))
+        options.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
